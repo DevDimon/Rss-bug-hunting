@@ -21,10 +21,6 @@ function getFiltered() {
   const search = searchInput.value;
   const category = categorySelect.value;
   const sort = sortSelect.value;
-  
-  if (search) {
-    result = result.filter((p) => p.name.toUpperCase().includes(search.toUpperCase()));
-  }
 
   if (category !== "all") {
     result = products.filter((p) => p.category == category);
@@ -34,6 +30,10 @@ function getFiltered() {
     result.sort((a, b) => b.price - a.price);
   } else if (sort === "asc") {
     result.sort((a, b) => a.price - b.price);
+  }
+
+  if (search) {
+    result = result.filter((p) => p.name.toUpperCase().includes(search.toUpperCase()));
   }
 
   return result;
