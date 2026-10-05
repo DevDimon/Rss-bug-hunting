@@ -8,11 +8,12 @@ const filterButtons = document.querySelectorAll(".filter");
 
 let tasks = [];
 let currentFilter = "all";
-let nextId = 1;
+let nextId = 0;
 
 function addTask() {
   const text = input.value;
   if (text.trim() == "") {
+    errorEl.removeAttribute('hidden');
     input.value = "";
     return;
   }
