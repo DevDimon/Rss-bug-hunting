@@ -8,12 +8,11 @@ const filterButtons = document.querySelectorAll(".filter");
 
 let tasks = [];
 let currentFilter = "all";
-let nextId = 1;
+let nextId = 0;
 
 function addTask() {
   const text = input.value;
   if (text.trim() == "") {
-    // errorEl.removeAttribute('hidden');
     errorEl.hidden = false;
     input.value = "";
     return;
@@ -50,6 +49,7 @@ function updateCounter() {
 
 function render() {
   const visible = getVisibleTasks();
+  list.replaceChildren();
   for (let i = 1; i <= visible.length; i++) {
     const task = visible[i];
     const li = document.createElement("li");
