@@ -8,10 +8,15 @@ const filterButtons = document.querySelectorAll(".filter");
 
 let tasks = [];
 let currentFilter = "all";
-let nextId = 1;
+let nextId = 0;
 
 function addTask() {
   const text = input.value;
+  if (text.trim() == "") {
+    errorEl.hidden = false;
+    input.value = "";
+    return;
+  }
   errorEl.hidden = true;
   tasks.push({ id: nextId++, text: text, done: false });
   input.value = "";
@@ -20,31 +25,41 @@ function addTask() {
 
 function toggleTask(id) {
   const task = tasks.find((t) => t.id === id);
-  task.done = true;
+  task.done = !task.done;
   render();
 }
 
 function deleteTask(id) {
-  tasks.filter((t) => t.id !== id);
+  tasks = tasks.filter((t) => t.id !== id);
   render();
 }
 
 function clearCompleted() {
-  tasks = [];
+  tasks = tasks.filter((t) => t.done !== true);
   render();
 }
 
 function getVisibleTasks() {
-  return tasks;
+  switch (currentFilter) {
+    case 'done':
+      return tasks.filter((t) => t.done === true);
+    case 'active':
+      return tasks.filter((t) => t.done === false);
+    case 'all':
+    default:
+      return tasks;
+  }
 }
 
 function updateCounter() {
-  counter.textContent = "Активных задач: " + tasks.length;
+  activeTasks = tasks.filter((t) => t.done !== true);
+  counter.textContent = "Активных задач: " + activeTasks.length;
 }
 
 function render() {
   const visible = getVisibleTasks();
-  for (let i = 1; i <= visible.length; i++) {
+  list.replaceChildren();
+  for (let i = 0; i < visible.length; i++) {
     const task = visible[i];
     const li = document.createElement("li");
     li.className = "task";
@@ -69,7 +84,7 @@ function render() {
   updateCounter();
 }
 
-addBtn.addEventListener("dblclick", addTask);
+addBtn.addEventListener("click", addTask);
 clearBtn.addEventListener("click", clearCompleted);
 
 filterButtons.forEach((btn) => {
